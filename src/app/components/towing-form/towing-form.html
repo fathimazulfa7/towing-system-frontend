@@ -1,0 +1,108 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Towing Request' : 'Create New Towing Request' }}</h1>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+      <label for="name">Name *</label>
+      <input
+        type="text"
+        id="name"
+        [(ngModel)]="towingRequest.name"
+        name="name"
+        placeholder="Enter customer name"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="address">Address *</label>
+      <input
+        type="text"
+        id="address"
+        [(ngModel)]="towingRequest.address"
+        name="address"
+        placeholder="Enter location address"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number *</label>
+      <input
+        type="tel"
+        id="phoneNumber"
+        [(ngModel)]="towingRequest.phoneNumber"
+        name="phoneNumber"
+        placeholder="Enter phone number"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="requestType">Request Type *</label>
+        <select
+          id="requestType"
+          [(ngModel)]="towingRequest.requestType"
+          name="requestType"
+          class="form-control"
+          required
+        >
+          <option value="">Select Type</option>
+          <option *ngFor="let type of requestTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select
+          id="status"
+          [(ngModel)]="towingRequest.status"
+          name="status"
+          class="form-control"
+        >
+          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        [(ngModel)]="towingRequest.description"
+        name="description"
+        placeholder="Enter detailed description of the issue"
+        class="form-control"
+        rows="6"
+        required
+      ></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading || !validateForm()"
+      >
+        {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="loading"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

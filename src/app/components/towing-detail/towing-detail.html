@@ -1,0 +1,80 @@
+<div class="detail-container">
+  <div class="detail-header">
+    <h1>Towing Request Details</h1>
+    <button class="btn btn-back" (click)="backToList()">← Back to List</button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading">Loading towing request details...</div>
+
+  <div *ngIf="!loading && towingRequest" class="detail-card">
+    <div class="detail-section">
+      <div class="detail-field">
+        <label>ID</label>
+        <div class="value">{{ towingRequest.id }}</div>
+      </div>
+
+      <div class="detail-field">
+        <label>Customer Name</label>
+        <div class="value">{{ towingRequest.name }}</div>
+      </div>
+
+      <div class="detail-field">
+        <label>Status</label>
+        <div class="value">
+          <span class="status-badge" [ngClass]="'status-' + (towingRequest.status | lowercase)">
+            {{ towingRequest.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-field">
+        <label>Address</label>
+        <div class="value">{{ towingRequest.address }}</div>
+      </div>
+
+      <div class="detail-field">
+        <label>Phone Number</label>
+        <div class="value">
+          <a href="tel:{{ towingRequest.phoneNumber }}">{{ towingRequest.phoneNumber }}</a>
+        </div>
+      </div>
+
+      <div class="detail-field">
+        <label>Request Type</label>
+        <div class="value">{{ towingRequest.requestType }}</div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-field">
+        <label>Description</label>
+        <div class="value description">{{ towingRequest.description }}</div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-field">
+        <label>Created Date</label>
+        <div class="value">{{ towingRequest.createdDate | date:'medium' }}</div>
+      </div>
+
+      <div class="detail-field">
+        <label>Updated Date</label>
+        <div class="value">{{ towingRequest.updatedDate | date:'medium' }}</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-warning" (click)="editRequest()">Edit</button>
+      <button class="btn btn-danger" (click)="deleteRequest()">Delete</button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !towingRequest && !error" class="no-data">
+    No towing request found.
+  </div>
+</div>

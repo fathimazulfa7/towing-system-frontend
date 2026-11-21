@@ -1,0 +1,83 @@
+<div class="towing-list-container">
+  <div class="header">
+    <h1>Towing Requests</h1>
+    <button class="btn btn-primary" (click)="createNew()">+ New Request</button>
+  </div>
+
+  <div class="filters">
+    <label>Filter by Status:</label>
+    <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="status-select">
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading">Loading towing requests...</div>
+
+  <div *ngIf="!loading && totalItems === 0" class="no-data">
+    No towing requests found.
+  </div>
+
+  <div *ngIf="!loading && totalItems > 0" class="table-wrapper">
+    <!-- Pagination Info -->
+    <div class="pagination-info">
+      <span>Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ currentPage * itemsPerPage > totalItems ? totalItems : currentPage * itemsPerPage }} of {{ totalItems }} requests</span>
+    </div>
+
+    <table class="towing-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Created Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of paginatedRequests">
+          <td>{{ request.id }}</td>
+          <td>{{ request.name }}</td>
+          <td>{{ request.address }}</td>
+          <td>{{ request.phoneNumber }}</td>
+          <td>{{ request.requestType }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="'status-' + (request.status | lowercase)">
+              {{ request.status }}
+            </span>
+          </td>
+          <td class="description">{{ (request.description | slice:0:50) }}{{ request.description.length > 50 ? '...' : '' }}</td>
+          <td>{{ request.createdDate | date:'short' }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-info" (click)="viewDetails(request.id)" title="View Details">👁️</button>
+            <button class="btn btn-sm btn-warning" (click)="editRequest(request.id)" title="Edit">✏️</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteRequest(request.id)" title="Delete">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <button class="btn btn-pagination" (click)="previousPage()" [disabled]="currentPage === 1">← Previous</button>
+      
+      <div class="page-numbers">
+        <button 
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          class="btn btn-page"
+          [class.active]="i + 1 === currentPage"
+          (click)="goToPage(i + 1)">
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button class="btn btn-pagination" (click)="nextPage()" [disabled]="currentPage === totalPages">Next →</button>
+    </div>
+  </div>
+</div>
+
